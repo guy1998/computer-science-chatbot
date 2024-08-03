@@ -1,0 +1,25 @@
+version: '3'
+services:
+  python-chatbot:
+    build: ./python-chatbot
+    container_name: python-chatbot
+    expose:
+      - "5000"
+    networks:
+      - mynetwork  
+
+  node-server:
+    build: ./node-server
+    container_name: node-server
+    ports:
+      - "1989:1989"
+    depends_on:
+      - python-chatbot
+    environment:
+      PYTHON_API_URL: http://python-chatbot:5000
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
